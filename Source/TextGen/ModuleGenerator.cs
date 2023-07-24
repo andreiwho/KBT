@@ -87,7 +87,10 @@ namespace Kepler
                 case EModuleType.Executable:
                     if (module.BuildOS == EBuildOS.Windows)
                     {
-                        sourceBuilder.AppendLine($"add_executable({moduleName} WIN32 {combinedSources})");
+                        if(WorkspaceOptions.IsConsoleOnly() && !WorkspaceOptions.IsConsoleOnly()) 
+                        {
+                            sourceBuilder.AppendLine($"add_executable({moduleName} WIN32 {combinedSources})");
+                        }
                     }
                     else
                     {

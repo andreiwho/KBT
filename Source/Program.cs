@@ -18,6 +18,9 @@ namespace Kepler
         [Option("editor", Required = false, HelpText = "Is editor build")]
         public bool bIsEditor { get; set; } = false;
 
+        [Option("console", Required = false, HelpText = "Are executables console apps")]
+        public bool bConsoleOnly {get; set;};
+
         public static string GetRoot()
         {
             return Instance.Root.Replace("\\", "/");
@@ -26,6 +29,11 @@ namespace Kepler
         public static bool IsEditorBuild()
         {
             return Instance.bIsEditor;
+        }
+
+        public static bool IsConsoleOnly()
+        {
+            return Instance.bConsoleOnly;
         }
     }
 }
