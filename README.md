@@ -1,7 +1,9 @@
 This is a tool for generating the build system for my engine 'Kepler'. 
 Maybe useful for someone. It is used to generate CMakeLists.txt for the entire solution, so it is compatible with CMake.
 
-To create a project you basically need to define 2 classes in the Game.Module.cs file.
+It is inspired by ```Unreal Build Tool```, uses C# for module definition. 
+
+To create a project you basically need to define 2 classes in the ```Game.Module.cs``` (Game is the module name, ```.Module.cs``` extension is ***required*** to be seen as a module) file.
 First one is the game itself:
 ```C#
 public class Game : ExecutableModule
@@ -31,5 +33,17 @@ For more examples, see ExampleFilesFromKepler. Modules are using the Module_.cs 
 Idk, thought it would be useful to see, how you can use it. 
 ```ExampleFilesFromKepler/ThirdParty.Module_.cs``` contains useful classes for adding CMake projects to the solution.
 
-It is inspired by Unreal Build Tool, uses C# for module definition. 
+# Building
 
+You can build it yourself by using the ```dotnet build``` command. Or by opening the ```KBT.csproj``` with visual studio and building from there.
+
+## Project generation:
+You can run the KBT without building it. Use ```dotnet run -Project KBT <args>``` to run it.
+
+Avaliable args are:
+
+```--console``` [Optional] to create a console executable. Without this arg on Windows it will build the Win32 executable.
+
+```--root <path-to-root>``` [Required] - Path to the root of the project.
+
+```--editor``` [Optional and useless] - Used for Kepler. Useless for other projects. Or you can utilize that somehow.
