@@ -19,7 +19,7 @@ namespace Kepler
         public bool bIsEditor { get; set; } = false;
 
         [Option("console", Required = false, HelpText = "Are executables console apps")]
-        public bool bConsoleOnly {get; set;};
+        public bool bConsoleOnly {get; set;} = false;
 
         public static string GetRoot()
         {
