@@ -25,9 +25,9 @@ namespace Kepler
             sb.AppendLine("\tadd_compile_options(/MP)");
             sb.AppendLine("endif()");
             sb.AppendLine($"set_property(GLOBAL PROPERTY PREDEFINED_TARGETS_FOLDER {ModuleGraph.FoundToolchainModule.CMakePredefinedTargetsFolder})");            
-            sb.AppendLine($"set(CMAKE_RUNTIME_OUTPUT_DIRECTORY {WorkspaceOptions.GetRoot()}{ModuleGraph.FoundToolchainModule.BinaryPath}/Bin CACHE STRING \"\")");
-            sb.AppendLine($"set(CMAKE_LIBRARY_OUTPUT_DIRECTORY {WorkspaceOptions.GetRoot()}{ModuleGraph.FoundToolchainModule.BinaryPath}/Lib CACHE STRING \"\")");
-            sb.AppendLine($"set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY {WorkspaceOptions.GetRoot()}{ModuleGraph.FoundToolchainModule.BinaryPath}/Arch CACHE STRING \"\")");
+            sb.AppendLine($"set(CMAKE_RUNTIME_OUTPUT_DIRECTORY {WorkspaceOptions.GetRoot()}/{ModuleGraph.FoundToolchainModule.BinaryPath}/Bin CACHE STRING \"\")");
+            sb.AppendLine($"set(CMAKE_LIBRARY_OUTPUT_DIRECTORY {WorkspaceOptions.GetRoot()}/{ModuleGraph.FoundToolchainModule.BinaryPath}/Lib CACHE STRING \"\")");
+            sb.AppendLine($"set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY {WorkspaceOptions.GetRoot()}/{ModuleGraph.FoundToolchainModule.BinaryPath}/Arch CACHE STRING \"\")");
             sb.AppendLine();
         }
 
