@@ -85,12 +85,9 @@ namespace Kepler
                     }
                     break;
                 case EModuleType.Executable:
-                    if (module.BuildOS == EBuildOS.Windows)
+                    if (module.BuildOS == EBuildOS.Windows && !WorkspaceOptions.IsConsoleOnly())
                     {
-                        if(WorkspaceOptions.IsConsoleOnly() && !WorkspaceOptions.IsConsoleOnly()) 
-                        {
-                            sourceBuilder.AppendLine($"add_executable({moduleName} WIN32 {combinedSources})");
-                        }
+                        sourceBuilder.AppendLine($"add_executable({moduleName} WIN32 {combinedSources})");   
                     }
                     else
                     {
