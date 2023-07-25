@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Kepler
 {
@@ -81,7 +82,38 @@ namespace Kepler
                 case EModuleType.CMakeNativeLibrary:
                     if (module is CMakeNativeModule cmake)
                     {
-                        sourceBuilder.AppendLine($"add_subdirectory({cmake.AddSubdirectoryFolder})");
+                        switch(cmake.CMakeModuleType)
+                        {
+                            case ECMakeNativeModuleType.AddSubdirectory:
+                                if (cmake.AddSubdirectoryFolder != null)
+                                {
+                                    sourceBuilder.AppendLine($"add_subdirectory({cmake.AddSubdirectoryFolder})");
+                                }
+                                break;
+                            case ECMakeNativeModuleType.FindPackage:
+                                if(cmake.PackageName != null)
+                                {
+                                    sourceBuilder.Append($"find_package({cmake.PackageName}");
+
+                                    if(cmake.bRequired)
+                                    {
+                                        sourceBuilder.Append(" REQUIRED");
+                                    }
+
+                                    if(cmake.ComponentsToRequire.Count > 0)
+                                    {
+                                        sourceBuilder.Append(" COMPONENTS ");
+                                        foreach(string component in cmake.ComponentsToRequire)
+                                        {
+                                            sourceBuilder.Append(component);
+                                        }
+                                    }
+
+                                    sourceBuilder.Append(")\n");
+                                }
+                                break;
+                        }
+                        
                     }
                     break;
                 case EModuleType.Executable:
@@ -128,12 +160,20 @@ namespace Kepler
 
         private static void SetupModuleProperties(ModuleBase module, ref StringBuilder sourceBuilder)
         {
+            bool bShouldSetupProperties = true;
+
+            // Check if this is a cmake native package module and skip setting up the properties
+            if(module is CMakeNativeModule cmake && cmake.CMakeModuleType == ECMakeNativeModuleType.FindPackage)
+            {
+                bShouldSetupProperties = false;
+            }
+
             string parentName = GetModuleFilter(module);
-            if (parentName != null)
+            if (parentName != null && bShouldSetupProperties)
             {
                 string moduleName = module.TargetName;
+
                 sourceBuilder.AppendLine($"set_target_properties({moduleName} PROPERTIES FOLDER {parentName} VS_DEBUGGER_WORKING_DIRECTORY {WorkspaceOptions.GetRoot()})");
-                
                 if (module.IsInterfaceModule())
                 {
                     sourceBuilder.AppendLine($"set_target_properties({moduleName}Config PROPERTIES FOLDER {parentName})");

@@ -12,10 +12,24 @@ namespace Kepler
         public string Type;
     }
 
+    public enum ECMakeNativeModuleType
+    {
+        AddSubdirectory,
+        FindPackage,
+    }
+
     public abstract class CMakeNativeModule : ModuleBase
     {
+        public ECMakeNativeModuleType CMakeModuleType { get; protected set; } = ECMakeNativeModuleType.AddSubdirectory;
+
         // When CMake code is generated, this folder will be added to the CMakeLists.txt file (add_subdirectory)
-        public string AddSubdirectoryFolder { get; protected set; }
+        public string AddSubdirectoryFolder { get; protected set; } = null;
+
+        public string PackageName { get; protected set; } = null;
+
+        public bool bRequired = false;
+
+        public List<string> ComponentsToRequire { get; protected set; } = new();
 
         // Basically, a bunch of sets, if a module needs these
         public List<CachedOption> CachedOptions { get; private set; } = new();
