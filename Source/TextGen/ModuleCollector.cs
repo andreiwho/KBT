@@ -1,3 +1,5 @@
+#define USE_PARALLEL_FOREACH
+
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -9,6 +11,7 @@ using Microsoft.CodeAnalysis.Emit;
 using Microsoft.CodeAnalysis;
 using System.Data;
 using System.Data.SqlTypes;
+
 
 namespace Kepler
 {   
@@ -49,15 +52,20 @@ namespace Kepler
         {
             IEnumerable<string> files = CollectModuleFiles();
             List<CompiledAssemblyObject> assemblies = new();
+            Mutex assemblyMutex = new();
 
-            foreach (var item in files)
+#if USE_PARALLEL_FOREACH
+            Parallel.ForEach(files, item =>
+#else
+            foreach(var item : items)
+#endif
             {
                 string path = item.Trim().Replace('\\', '/');
 
                 string? source = File.ReadAllText(item);
                 if(source == null)
                 {
-                    continue;
+                    return;
                 }
 
                 var syntaxTree = SyntaxFactory.ParseSyntaxTree(source.Trim());
@@ -76,13 +84,15 @@ namespace Kepler
                         Console.WriteLine("Not success!");
                     }
 
+                    assemblyMutex.WaitOne();
                     assemblies.Add(new CompiledAssemblyObject
                     {
                         AssemblyItself = Assembly.Load(((MemoryStream)codeStream).ToArray()),
                         ModuleFilePath = path
                     });
+                    assemblyMutex.ReleaseMutex();
                 }
-            }
+            });
 
             return assemblies;
         }
