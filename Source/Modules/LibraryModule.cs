@@ -28,6 +28,10 @@ namespace Kepler
                     PublicDefinitions.Add($"\"{nameBuildMacroPart}_API=__declspec(dllimport)\"");
                     PrivateDefinitions.Add($"\"{nameBuildMacroPart}_API=__declspec(dllexport)\"");
                     break;
+                case EBuildOS.Unix:
+                    PublicDefinitions.Add($"\"{nameBuildMacroPart}_API=__attribute__((visibility(\"default\")))\"");
+                    PrivateDefinitions.Add($"\"{nameBuildMacroPart}_API=__declspec(dllexport)\"");
+                    break;
                 default:
                     break;
             }
