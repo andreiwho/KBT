@@ -69,7 +69,7 @@ namespace Kepler
                     {
                         sourceBuilder.AppendLine($"add_library({moduleName} STATIC {combinedSources})");
                     }
-                    break;
+                    break;  
                 case EModuleType.SharedLibrary:
                     if (combinedSources != "")
                     {
@@ -231,8 +231,8 @@ namespace Kepler
                     case EModuleType.SharedLibrary:
                     case EModuleType.Executable:
                     case EModuleType.CMakeNativeLibrary:
-                        string publicDeps = CMakeHelpers.GetAccessibilityString(EAccessModifier.Public, publicValues, bPathRequired ? module : null);
-                        string privateDeps = CMakeHelpers.GetAccessibilityString(EAccessModifier.Private, privateValues, bPathRequired ? module : null);
+                        string? publicDeps = CMakeHelpers.GetAccessibilityString(EAccessModifier.Public, publicValues, bPathRequired ? module : null);
+                        string? privateDeps = CMakeHelpers.GetAccessibilityString(EAccessModifier.Private, privateValues, bPathRequired ? module : null);
                         if ((publicDeps != null && publicDeps != "") || (privateDeps != null && privateDeps != ""))
                         {
                             sourceBuilder.AppendLine($"{expr}({moduleName} {CMakeHelpers.CombineAccessibilityStrings(publicDeps, privateDeps)})");

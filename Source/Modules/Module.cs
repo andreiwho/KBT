@@ -198,7 +198,7 @@ namespace Kepler
             ReadModuleFileDirectory(buildInfo.ModuleFilePath);
             ReadTargetPlatform();
 
-            if(this is LibraryModule || this is ExecutableModule)
+            if(this is LibraryModule || this is ExecutableModule || this is SharedLibraryModule)
             {
                 // This is doubtful, though may be ok
                 PublicIncludeDirectories.Add(ModuleConfigFileDirectory);

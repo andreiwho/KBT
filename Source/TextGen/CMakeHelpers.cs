@@ -31,12 +31,16 @@ namespace Kepler
             sb.AppendLine();
         }
 
-        public static string MakeCMakeArray(IEnumerable<string> strings)
+        public static string MakeCMakeArray(List<string> strings)
         {
             StringBuilder sb = new StringBuilder();
-            foreach (var item in strings)
+            for(int i = 0; i < strings.Count; ++i)
             {
-                sb.Append($"{item};");
+                sb.Append($"{strings[i]}");
+                if(i < strings.Count - 1)
+                {
+                    sb.Append(';');
+                }
             }
             return sb.ToString();
         }
@@ -82,8 +86,13 @@ namespace Kepler
             return sb.ToString();
         }
 
-        public static string CombineAccessibilityStrings(params string[] strings)
+        public static string CombineAccessibilityStrings(params string?[] strings)
         {
+            if(strings == null)
+            {
+                return "";
+            }
+
             StringBuilder sb = new StringBuilder();
             foreach(var item in strings)
             {
@@ -96,7 +105,7 @@ namespace Kepler
             return sb.ToString().Trim();
         }
 
-        public static string CombineSources(IEnumerable<string> sources, ModuleBase module = null)
+        public static string CombineSources(List<string> sources, ModuleBase? module = null)
         {
             if(module != null)
             {
