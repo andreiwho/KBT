@@ -1,3 +1,4 @@
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -233,11 +234,41 @@ namespace Kepler
             };
         }
 
+        public virtual void ExcludeSources(List<string> sources)
+        {
+            List<string> restrictedPlatforms = new();
+            foreach(var value in Enum.GetValues<EBuildOS>())
+            {
+                if(value != BuildOS)
+                {
+                    restrictedPlatforms.Add($"_{value}");
+                }
+            }
+
+            List<string> excludedSources = new();
+            foreach(var source in sources)
+            {
+                foreach(var restricted in restrictedPlatforms)
+                {
+                    if(source.Replace("\\", "/").Contains($"/{restricted}/"))
+                    {
+                        excludedSources.Add(source);
+                    }
+                }
+            }
+
+            sources.RemoveAll(str => {
+                return excludedSources.Contains(str);
+            });
+        }
+
         // Reads all .cpp, .h and .inl files. Override if custom information is needed or if you don't need all files.
         public virtual void AddProjectSourceFiles()
         {
             SourceFiles.AddRange(Directory.GetFiles(ModuleConfigFileDirectory, "*.*", SearchOption.AllDirectories)
                 .Where(s => s.EndsWith(".cpp") || s.EndsWith(".h") || s.EndsWith(".inl") || s.EndsWith(".ixx") || s.EndsWith(".cppm") || s.EndsWith(".Module.cs")));
+        
+            ExcludeSources(SourceFiles);
         }
 
         // Find precompiled headers.
