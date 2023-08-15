@@ -28,4 +28,11 @@ namespace Kepler
         {
         }
     }
+
+    public sealed class DefaultToolchain : ToolchainModule
+    {
+        public DefaultToolchain(ModuleConfig config) : base(config)
+        {
+        }
+    }
 }

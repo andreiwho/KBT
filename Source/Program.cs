@@ -84,7 +84,12 @@ internal class Program
         ModuleGraph.CreateGraph(modules);
         if (ModuleGraph.FoundToolchainModule == null)
         {
-            throw new Exception("No toolchain module found.");
+            ModuleConfig? config = buildInfo.Clone() as ModuleConfig;
+            if(config == null)
+            {
+                throw new Exception("Failed to clone build config!");
+            }
+            ModuleGraph.FoundToolchainModule = new DefaultToolchain(config!);
         }
 
         string root = WorkspaceOptions.GetRoot();

@@ -14,7 +14,7 @@ namespace Kepler
 
     public class ModuleGraph
     {
-        public static ToolchainModule FoundToolchainModule { get; private set; } = null;
+        public static ToolchainModule FoundToolchainModule { get; set; } = null;
 
         private static HashSet<string> SystemLibraries = new();
 
