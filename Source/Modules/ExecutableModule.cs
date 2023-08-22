@@ -9,8 +9,6 @@ namespace Kepler
         public ExecutableModule(ModuleConfig buildInfo, [CallerFilePath] string modulePath = "") : base(buildInfo, modulePath) 
         {
             ModuleType = EModuleType.Executable;
-
-            CommandLineArguments.Add(TargetName);
         }
     }
 }
