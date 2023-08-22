@@ -165,8 +165,10 @@ namespace Kepler
             // Check if this is a cmake native package module and skip setting up the properties
             if(module is CMakeNativeModule cmake && cmake.CMakeModuleType == ECMakeNativeModuleType.FindPackage)
             {
-                bShouldSetupProperties = false;
+                bShouldSetupProperties = false;   
+                sourceBuilder.AppendLine($"set_target_properties({cmake.TargetName}Config PROPERTIES FOLDER {GetModuleFilter(module)})");
             }
+
 
             string parentName = GetModuleFilter(module);
             if (parentName != null && bShouldSetupProperties)
